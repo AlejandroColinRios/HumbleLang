@@ -1,0 +1,183 @@
+[PROG]
+  [PR12] - Valor: 'PR12'
+  [CE8] - Valor: 'CE8'
+  [STMT_LIST]
+    [DECLARACION]
+      [PR05] - Valor: 'PR05'
+      [DEC_PRIME]
+        [IDEN] - Valor: 'IDEN'
+        [OPAS] - Valor: 'OPAS'
+        [LOG_EXPR]
+          [REL_EXPR]
+            [ARITH_EXPR]
+              [TERM]
+                [CADE] - Valor: 'CADE'
+                [TERM_PRIME]
+              [ARITH_EXPR_PRIME]
+            [REL_EXPR_PRIME]
+          [LOG_EXPR_PRIME]
+    [STMT_LIST]
+      [IF_STMT]
+        [PR18] - Valor: 'PR18'
+        [CE6] - Valor: 'CE6'
+        [LOG_EXPR]
+          [REL_EXPR]
+            [ARITH_EXPR]
+              [TERM]
+                [IDEN] - Valor: 'IDEN'
+                [TERM_PRIME]
+                  [OPRE4] - Valor: 'OPRE4'
+                  [CN_ENTERA] - Valor: 'CN_ENTERA'
+                  [TERM_PRIME]
+              [ARITH_EXPR_PRIME]
+            [REL_EXPR_PRIME]
+          [LOG_EXPR_PRIME]
+        [CE7] - Valor: 'CE7'
+        [CE8] - Valor: 'CE8'
+        [STMT_LIST]
+          [PRINT_STMT]
+            [PR09] - Valor: 'PR09'
+            [LOG_EXPR]
+              [REL_EXPR]
+                [ARITH_EXPR]
+                  [TERM]
+                    [CADE] - Valor: 'CADE'
+                    [TERM_PRIME]
+                  [ARITH_EXPR_PRIME]
+                [REL_EXPR_PRIME]
+              [LOG_EXPR_PRIME]
+          [STMT_LIST]
+        [CE9] - Valor: 'CE9'
+      [STMT_LIST]
+        [IF_STMT]
+          [PR18] - Valor: 'PR18'
+          [CE6] - Valor: 'CE6'
+          [LOG_EXPR]
+            [REL_EXPR]
+              [ARITH_EXPR]
+                [TERM]
+                  [IDEN] - Valor: 'IDEN'
+                  [TERM_PRIME]
+                [ARITH_EXPR_PRIME]
+                  [OPRE1] - Valor: 'OPRE1'
+                  [TERM]
+                    [CN_ENTERA] - Valor: 'CN_ENTERA'
+                    [TERM_PRIME]
+                  [ARITH_EXPR_PRIME]
+              [REL_EXPR_PRIME]
+            [LOG_EXPR_PRIME]
+          [CE7] - Valor: 'CE7'
+          [CE8] - Valor: 'CE8'
+          [STMT_LIST]
+            [PRINT_STMT]
+              [PR09] - Valor: 'PR09'
+              [LOG_EXPR]
+                [REL_EXPR]
+                  [ARITH_EXPR]
+                    [TERM]
+                      [CADE] - Valor: 'CADE'
+                      [TERM_PRIME]
+                    [ARITH_EXPR_PRIME]
+                  [REL_EXPR_PRIME]
+                [LOG_EXPR_PRIME]
+            [STMT_LIST]
+          [CE9] - Valor: 'CE9'
+          [IF_STMT_PRIME]
+            [PR19] - Valor: 'PR19'
+            [CE8] - Valor: 'CE8'
+            [STMT_LIST]
+              [PRINT_STMT]
+                [PR09] - Valor: 'PR09'
+                [LOG_EXPR]
+                  [REL_EXPR]
+                    [ARITH_EXPR]
+                      [TERM]
+                        [CADE] - Valor: 'CADE'
+                        [TERM_PRIME]
+                      [ARITH_EXPR_PRIME]
+                    [REL_EXPR_PRIME]
+                  [LOG_EXPR_PRIME]
+              [STMT_LIST]
+            [CE9] - Valor: 'CE9'
+        [STMT_LIST]
+          [PR14] - Valor: 'PR14'
+          [STMT_LIST]
+            [CICLO]
+              [PR02] - Valor: 'PR02'
+              [PR04] - Valor: 'PR04'
+              [IDEN] - Valor: 'IDEN'
+              [OPAS] - Valor: 'OPAS'
+              [LOG_EXPR]
+                [REL_EXPR]
+                  [ARITH_EXPR]
+                    [TERM]
+                      [CN_ENTERA] - Valor: 'CN_ENTERA'
+                      [TERM_PRIME]
+                    [ARITH_EXPR_PRIME]
+                  [REL_EXPR_PRIME]
+                [LOG_EXPR_PRIME]
+              [PR08] - Valor: 'PR08'
+              [LOG_EXPR]
+                [REL_EXPR]
+                  [ARITH_EXPR]
+                    [TERM]
+                      [IDEN] - Valor: 'IDEN'
+                      [TERM_PRIME]
+                    [ARITH_EXPR_PRIME]
+                      [OPRE1] - Valor: 'OPRE1'
+                      [TERM]
+                        [CN_ENTERA] - Valor: 'CN_ENTERA'
+                        [TERM_PRIME]
+                      [ARITH_EXPR_PRIME]
+                  [REL_EXPR_PRIME]
+                [LOG_EXPR_PRIME]
+              [PR11] - Valor: 'PR11'
+              [LOG_EXPR]
+                [REL_EXPR]
+                  [ARITH_EXPR]
+                    [TERM]
+                      [CN_ENTERA] - Valor: 'CN_ENTERA'
+                      [TERM_PRIME]
+                    [ARITH_EXPR_PRIME]
+                  [REL_EXPR_PRIME]
+                [LOG_EXPR_PRIME]
+              [CE8] - Valor: 'CE8'
+              [STMT_LIST]
+                [PRINT_STMT]
+                  [PR09] - Valor: 'PR09'
+                  [LOG_EXPR]
+                    [REL_EXPR]
+                      [ARITH_EXPR]
+                        [TERM]
+                          [IDEN] - Valor: 'IDEN'
+                          [TERM_PRIME]
+                        [ARITH_EXPR_PRIME]
+                      [REL_EXPR_PRIME]
+                    [LOG_EXPR_PRIME]
+                [STMT_LIST]
+                  [IF_STMT]
+                    [PR18] - Valor: 'PR18'
+                    [CE6] - Valor: 'CE6'
+                    [LOG_EXPR]
+                      [REL_EXPR]
+                        [ARITH_EXPR]
+                          [TERM]
+                            [IDEN] - Valor: 'IDEN'
+                            [TERM_PRIME]
+                              [OPRE5] - Valor: 'OPRE5'
+                              [CN_ENTERA] - Valor: 'CN_ENTERA'
+                              [TERM_PRIME]
+                          [ARITH_EXPR_PRIME]
+                        [REL_EXPR_PRIME]
+                      [LOG_EXPR_PRIME]
+                    [CE7] - Valor: 'CE7'
+                    [CE8] - Valor: 'CE8'
+                    [STMT_LIST]
+                      [PR17] - Valor: 'PR17'
+                      [STMT_LIST]
+                    [CE9] - Valor: 'CE9'
+                  [STMT_LIST]
+              [CE9] - Valor: 'CE9'
+            [STMT_LIST]
+  [CE9] - Valor: 'CE9'
+  [PR07] - Valor: 'PR07'
