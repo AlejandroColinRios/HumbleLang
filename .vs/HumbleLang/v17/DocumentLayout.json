@@ -1,30 +1,22 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\aleja\\Downloads\\HumbleLang3\\HumbleLang\\",
+  "WorkspaceRootPath": "C:\\Users\\aleja\\HumbleLang\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{1E29F0F8-EF62-4971-91FE-ACD3F4689871}|HumbleLang\\HumbleLang.csproj|c:\\users\\aleja\\downloads\\humblelang3\\humblelang\\humblelang\\analizadorll1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1E29F0F8-EF62-4971-91FE-ACD3F4689871}|HumbleLang\\HumbleLang.csproj|solutionrelative:humblelang\\analizadorll1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1E29F0F8-EF62-4971-91FE-ACD3F4689871}|HumbleLang\\HumbleLang.csproj|c:\\users\\aleja\\downloads\\humblelang3\\humblelang\\humblelang\\analizadorsemantico.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{1E29F0F8-EF62-4971-91FE-ACD3F4689871}|HumbleLang\\HumbleLang.csproj|c:\\users\\aleja\\humblelang\\humblelang\\analizadorsemantico.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{1E29F0F8-EF62-4971-91FE-ACD3F4689871}|HumbleLang\\HumbleLang.csproj|solutionrelative:humblelang\\analizadorsemantico.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{1E29F0F8-EF62-4971-91FE-ACD3F4689871}|HumbleLang\\HumbleLang.csproj|c:\\users\\aleja\\downloads\\humblelang3\\humblelang\\humblelang\\generadorcodigointermedio.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1E29F0F8-EF62-4971-91FE-ACD3F4689871}|HumbleLang\\HumbleLang.csproj|solutionrelative:humblelang\\generadorcodigointermedio.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{1E29F0F8-EF62-4971-91FE-ACD3F4689871}|HumbleLang\\HumbleLang.csproj|c:\\users\\aleja\\humblelang\\humblelang\\interprete.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1E29F0F8-EF62-4971-91FE-ACD3F4689871}|HumbleLang\\HumbleLang.csproj|solutionrelative:humblelang\\interprete.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{1E29F0F8-EF62-4971-91FE-ACD3F4689871}|HumbleLang\\HumbleLang.csproj|c:\\users\\aleja\\downloads\\humblelang3\\humblelang\\humblelang\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{1E29F0F8-EF62-4971-91FE-ACD3F4689871}|HumbleLang\\HumbleLang.csproj|c:\\users\\aleja\\humblelang\\humblelang\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{1E29F0F8-EF62-4971-91FE-ACD3F4689871}|HumbleLang\\HumbleLang.csproj|solutionrelative:humblelang\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{1E29F0F8-EF62-4971-91FE-ACD3F4689871}|HumbleLang\\HumbleLang.csproj|C:\\Users\\aleja\\Downloads\\HumbleLang3\\HumbleLang\\humblelang\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{1E29F0F8-EF62-4971-91FE-ACD3F4689871}|HumbleLang\\HumbleLang.csproj|solutionrelative:humblelang\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1E29F0F8-EF62-4971-91FE-ACD3F4689871}|HumbleLang\\HumbleLang.csproj|c:\\users\\aleja\\downloads\\humblelang3\\humblelang\\humblelang\\notacionconvertidor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1E29F0F8-EF62-4971-91FE-ACD3F4689871}|HumbleLang\\HumbleLang.csproj|solutionrelative:humblelang\\notacionconvertidor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{1E29F0F8-EF62-4971-91FE-ACD3F4689871}|HumbleLang\\HumbleLang.csproj|c:\\users\\aleja\\humblelang\\humblelang\\analizadorll1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1E29F0F8-EF62-4971-91FE-ACD3F4689871}|HumbleLang\\HumbleLang.csproj|solutionrelative:humblelang\\analizadorll1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -39,75 +31,54 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "AnalizadorLL1.cs",
-              "DocumentMoniker": "C:\\Users\\aleja\\Downloads\\HumbleLang3\\HumbleLang\\HumbleLang\\AnalizadorLL1.cs",
-              "RelativeDocumentMoniker": "HumbleLang\\AnalizadorLL1.cs",
-              "ToolTip": "C:\\Users\\aleja\\Downloads\\HumbleLang3\\HumbleLang\\HumbleLang\\AnalizadorLL1.cs",
-              "RelativeToolTip": "HumbleLang\\AnalizadorLL1.cs",
-              "ViewState": "AgIAAKwCAAAAAAAAAAAAwLwCAAAFAAAAAAAAAA==",
+              "Title": "AnalizadorSemantico.cs",
+              "DocumentMoniker": "C:\\Users\\aleja\\HumbleLang\\HumbleLang\\AnalizadorSemantico.cs",
+              "RelativeDocumentMoniker": "HumbleLang\\AnalizadorSemantico.cs",
+              "ToolTip": "C:\\Users\\aleja\\HumbleLang\\HumbleLang\\AnalizadorSemantico.cs",
+              "RelativeToolTip": "HumbleLang\\AnalizadorSemantico.cs",
+              "ViewState": "AgIAANUAAAAAAAAAAAAkwA0BAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-27T18:23:21.909Z",
+              "WhenOpened": "2025-12-08T04:26:32.5Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "AnalizadorLL1.cs",
+              "DocumentMoniker": "C:\\Users\\aleja\\HumbleLang\\HumbleLang\\AnalizadorLL1.cs",
+              "RelativeDocumentMoniker": "HumbleLang\\AnalizadorLL1.cs",
+              "ToolTip": "C:\\Users\\aleja\\HumbleLang\\HumbleLang\\AnalizadorLL1.cs",
+              "RelativeToolTip": "HumbleLang\\AnalizadorLL1.cs",
+              "ViewState": "AgIAAPABAAAAAAAAAAAAACoCAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-08T04:11:34.815Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "AnalizadorSemantico.cs",
-              "DocumentMoniker": "C:\\Users\\aleja\\Downloads\\HumbleLang3\\HumbleLang\\HumbleLang\\AnalizadorSemantico.cs",
-              "RelativeDocumentMoniker": "HumbleLang\\AnalizadorSemantico.cs",
-              "ToolTip": "C:\\Users\\aleja\\Downloads\\HumbleLang3\\HumbleLang\\HumbleLang\\AnalizadorSemantico.cs",
-              "RelativeToolTip": "HumbleLang\\AnalizadorSemantico.cs",
-              "ViewState": "AgIAACoBAACAxTCxalTwv1IBAAAnAAAAAAAAAA==",
+              "Title": "Interprete.cs",
+              "DocumentMoniker": "C:\\Users\\aleja\\HumbleLang\\HumbleLang\\Interprete.cs",
+              "RelativeDocumentMoniker": "HumbleLang\\Interprete.cs",
+              "ToolTip": "C:\\Users\\aleja\\HumbleLang\\HumbleLang\\Interprete.cs",
+              "RelativeToolTip": "HumbleLang\\Interprete.cs",
+              "ViewState": "AgIAAJAAAAAA/P9/HiYOwDwAAABYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-21T17:28:48.658Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "GeneradorCodigoIntermedio.cs",
-              "DocumentMoniker": "C:\\Users\\aleja\\Downloads\\HumbleLang3\\HumbleLang\\HumbleLang\\GeneradorCodigoIntermedio.cs",
-              "RelativeDocumentMoniker": "HumbleLang\\GeneradorCodigoIntermedio.cs",
-              "ToolTip": "C:\\Users\\aleja\\Downloads\\HumbleLang3\\HumbleLang\\HumbleLang\\GeneradorCodigoIntermedio.cs",
-              "RelativeToolTip": "HumbleLang\\GeneradorCodigoIntermedio.cs",
-              "ViewState": "AgIAABIAAACADMMYM+AbwEIAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-21T17:26:16.948Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Form1.cs",
-              "DocumentMoniker": "C:\\Users\\aleja\\Downloads\\HumbleLang3\\HumbleLang\\HumbleLang\\Form1.cs",
-              "RelativeDocumentMoniker": "HumbleLang\\Form1.cs",
-              "ToolTip": "C:\\Users\\aleja\\Downloads\\HumbleLang3\\HumbleLang\\HumbleLang\\Form1.cs",
-              "RelativeToolTip": "HumbleLang\\Form1.cs",
-              "ViewState": "AgIAACoDAAAAAAAAAAAgwGEDAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-20T17:50:54.067Z",
+              "WhenOpened": "2025-12-08T04:04:58.527Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "NotacionConvertidor.cs",
-              "DocumentMoniker": "C:\\Users\\aleja\\Downloads\\HumbleLang3\\HumbleLang\\HumbleLang\\NotacionConvertidor.cs",
-              "RelativeDocumentMoniker": "HumbleLang\\NotacionConvertidor.cs",
-              "ToolTip": "C:\\Users\\aleja\\Downloads\\HumbleLang3\\HumbleLang\\HumbleLang\\NotacionConvertidor.cs",
-              "RelativeToolTip": "HumbleLang\\NotacionConvertidor.cs",
-              "ViewState": "AgIAAI8AAAAAAAAAAAAuwMsAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-20T17:45:34.185Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Form1.cs [Design]",
-              "DocumentMoniker": "C:\\Users\\aleja\\Downloads\\HumbleLang3\\HumbleLang\\HumbleLang\\Form1.cs",
+              "DocumentIndex": 2,
+              "Title": "Form1.cs",
+              "DocumentMoniker": "C:\\Users\\aleja\\HumbleLang\\HumbleLang\\Form1.cs",
               "RelativeDocumentMoniker": "HumbleLang\\Form1.cs",
-              "ToolTip": "C:\\Users\\aleja\\Downloads\\HumbleLang3\\HumbleLang\\HumbleLang\\Form1.cs [Design]",
-              "RelativeToolTip": "HumbleLang\\Form1.cs [Design]",
+              "ToolTip": "C:\\Users\\aleja\\HumbleLang\\HumbleLang\\Form1.cs",
+              "RelativeToolTip": "HumbleLang\\Form1.cs",
+              "ViewState": "AgIAAIwBAAAAAAAAAAAswMUBAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-20T17:40:37.404Z"
+              "WhenOpened": "2025-10-20T17:50:54.067Z",
+              "EditorCaption": ""
             }
           ]
         }

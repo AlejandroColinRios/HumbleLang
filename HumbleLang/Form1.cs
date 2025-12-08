@@ -129,12 +129,18 @@ namespace HumbleLang
             tablaIdentificadores.Columns.Add("Identificador", typeof(string));
             tablaIdentificadores.Columns.Add("Línea", typeof(int));
 
+            // =========================================================
+            // 1. LISTA MAESTRA DE TOKENS (TIPO, VALOR, LINEA)
+            // Esta lista guardará "CN_ENTERA" y "10" juntos.
+            // =========================================================
+            List<(string Tipo, string Valor, int Linea)> tokensParaSintaxis = new List<(string, string, int)>();
+
             string estadoActual = "0";
             StringBuilder lexemaOriginal = new StringBuilder();
             StringBuilder lexemaParaEvaluar = new StringBuilder();
             int numeroLinea = 1;
 
-            // INICIO DEL ANÁLISIS LÉXICO
+            // --- INICIO DEL ANÁLISIS LÉXICO ---
             for (int i = 0; i < entrada.Length; i++)
             {
                 char caracter = entrada[i];
@@ -144,7 +150,8 @@ namespace HumbleLang
                 {
                     if (lexemaParaEvaluar.Length > 0)
                     {
-                        ValidarLexema(lexemaOriginal.ToString(), estadoActual, tablaTokens, archivoTokens, numeroLinea, tablaIdentificadores);
+                        // PASAMOS LA LISTA 'tokensParaSintaxis'
+                        ValidarLexema(lexemaOriginal.ToString(), estadoActual, tablaTokens, archivoTokens, numeroLinea, tablaIdentificadores, tokensParaSintaxis);
                         lexemaOriginal.Clear();
                         lexemaParaEvaluar.Clear();
                         estadoActual = "0";
@@ -155,10 +162,8 @@ namespace HumbleLang
                 }
                 else if (caracter == '\r') continue;
 
-                // Lógica de transición
                 string siguienteEstado = "";
 
-                // Manejo de cadenas y comentarios, que no deben ser analizados con la matriz estándar
                 if (estadoActual == "121" || estadoActual == "124")
                 {
                     lexemaOriginal.Append(caracter);
@@ -168,20 +173,19 @@ namespace HumbleLang
                     {
                         siguienteEstado = matriz[estadoActual][simbolo];
                         estadoActual = siguienteEstado;
-                        if (estadoActual == "123" || estadoActual == "126") // Estados de aceptación para CADE y COMEN
+                        if (estadoActual == "123" || estadoActual == "126")
                         {
-                            ValidarLexema(lexemaOriginal.ToString(), estadoActual, tablaTokens, archivoTokens, numeroLinea, tablaIdentificadores);
+                            ValidarLexema(lexemaOriginal.ToString(), estadoActual, tablaTokens, archivoTokens, numeroLinea, tablaIdentificadores, tokensParaSintaxis);
                             lexemaOriginal.Clear();
                             lexemaParaEvaluar.Clear();
                             estadoActual = "0";
                         }
                     }
-                    else // Carácter inesperado dentro de la cadena o comentario
+                    else
                     {
-                        // Si la cadena o comentario no se cierra, se considera un error al final de la línea o archivo
                         if (i == entrada.Length - 1)
                         {
-                            ValidarLexema(lexemaOriginal.ToString(), estadoActual, tablaTokens, archivoTokens, numeroLinea, tablaIdentificadores);
+                            ValidarLexema(lexemaOriginal.ToString(), estadoActual, tablaTokens, archivoTokens, numeroLinea, tablaIdentificadores, tokensParaSintaxis);
                             lexemaOriginal.Clear();
                             lexemaParaEvaluar.Clear();
                             estadoActual = "0";
@@ -190,43 +194,33 @@ namespace HumbleLang
                     continue;
                 }
 
-                // Lógica para el resto de los tokens
                 lexemaOriginal.Append(caracter);
 
                 bool esDelimitador = (caracter == ' ' || caracter == '\t' || caracter == ';');
                 bool esFinDeCadena = (i == entrada.Length - 1);
 
-                if (esDelimitador)
-                {
-                    simbolo = "DEL";
-                }
-                else if (char.IsUpper(caracter))
-                {
-                    simbolo = $"{caracter}_1";
-                }
+                if (esDelimitador) simbolo = "DEL";
+                else if (char.IsUpper(caracter)) simbolo = $"{caracter}_1";
 
-                // Si el estado actual es 0 y el carácter es ", se inicia el reconocimiento de cadena
                 if (estadoActual == "0" && simbolo == "\"")
                 {
-                    estadoActual = "121"; // El estado para "CADE"
+                    estadoActual = "121";
                     lexemaParaEvaluar.Append(caracter);
                     continue;
                 }
 
-                // Si el estado actual es 0 y el carácter es #, se inicia el reconocimiento de comentario
                 if (estadoActual == "0" && simbolo == "#")
                 {
-                    estadoActual = "124"; // El estado para "COMEN"
+                    estadoActual = "124";
                     lexemaParaEvaluar.Append(caracter);
                     continue;
                 }
 
                 if (!matriz.ContainsKey(estadoActual) || !matriz[estadoActual].ContainsKey(simbolo))
                 {
-                    // Manejo de tokens desconocidos o delimitadores que cierran un token
                     if (lexemaParaEvaluar.Length > 0)
                     {
-                        ValidarLexema(lexemaOriginal.ToString().Trim(), estadoActual, tablaTokens, archivoTokens, numeroLinea, tablaIdentificadores);
+                        ValidarLexema(lexemaOriginal.ToString().Trim(), estadoActual, tablaTokens, archivoTokens, numeroLinea, tablaIdentificadores, tokensParaSintaxis);
                         lexemaOriginal.Clear();
                         lexemaParaEvaluar.Clear();
                         estadoActual = "0";
@@ -237,7 +231,7 @@ namespace HumbleLang
                         lexemaParaEvaluar.Append(caracter);
                         if (i == entrada.Length - 1)
                         {
-                            ValidarLexema(lexemaOriginal.ToString(), estadoActual, tablaTokens, archivoTokens, numeroLinea, tablaIdentificadores);
+                            ValidarLexema(lexemaOriginal.ToString(), estadoActual, tablaTokens, archivoTokens, numeroLinea, tablaIdentificadores, tokensParaSintaxis);
                         }
                     }
                     continue;
@@ -245,7 +239,6 @@ namespace HumbleLang
 
                 siguienteEstado = matriz[estadoActual][simbolo];
                 estadoActual = siguienteEstado;
-
                 lexemaParaEvaluar.Append(caracter);
 
                 if ((esDelimitador || esFinDeCadena) && lexemaParaEvaluar.Length > 0)
@@ -253,7 +246,7 @@ namespace HumbleLang
                     string lexema = lexemaParaEvaluar.ToString().Trim();
                     if (!string.IsNullOrWhiteSpace(lexema))
                     {
-                        ValidarLexema(lexema, estadoActual, tablaTokens, archivoTokens, numeroLinea, tablaIdentificadores);
+                        ValidarLexema(lexema, estadoActual, tablaTokens, archivoTokens, numeroLinea, tablaIdentificadores, tokensParaSintaxis);
                     }
                     lexemaOriginal.Clear();
                     lexemaParaEvaluar.Clear();
@@ -261,90 +254,69 @@ namespace HumbleLang
                 }
             }
 
-            // Lógica final para procesar cualquier lexema restante
             if (lexemaParaEvaluar.Length > 0)
             {
-                ValidarLexema(lexemaOriginal.ToString().Trim(), estadoActual, tablaTokens, archivoTokens, numeroLinea, tablaIdentificadores);
+                ValidarLexema(lexemaOriginal.ToString().Trim(), estadoActual, tablaTokens, archivoTokens, numeroLinea, tablaIdentificadores, tokensParaSintaxis);
             }
 
             rtbTokens.Text = archivoTokens.ToString();
-            // FIN DEL ANÁLISIS LÉXICO
+            // --- FIN DEL ANÁLISIS LÉXICO ---
 
-            // PREPARACIÓN PARA ANÁLISIS SINTÁCTICO
-            List<(string Token, int Linea)> tokensParaSintaxis = new List<(string, int)>();
-            int lineaActual = 1;
-            string[] lineas = rtbTokens.Text.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-            foreach (var linea in lineas)
-            {
-                var tokensEnLinea = linea.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                foreach (var token in tokensEnLinea)
-                {
-                    tokensParaSintaxis.Add((token, lineaActual));
-                }
-                lineaActual++;
-            }
+
+            // =========================================================================
+            // 2. ANÁLISIS SINTÁCTICO (PARSER LL1)
+            // Usamos directamente la lista 'tokensParaSintaxis' que llenamos arriba.
+            // =========================================================================
 
             AnalizadorLL1 analizadorSintactico = new AnalizadorLL1();
             NodoAST arbol = analizadorSintactico.Analizar(tokensParaSintaxis);
 
 
             // =========================================================================
-            // CONVERSIÓN DE NOTACIÓN (Aplicada a la expresión de la Línea 7: (edad >= 18))
+            // 3. CONVERSIÓN DE NOTACIÓN (Adaptada a la nueva lista)
             // =========================================================================
 
-            // Identificar los tokens de la expresión condicional de la línea 7: (edad >= 18)
-            List<(string Token, int Linea)> tokensCondicion = new List<(string Token, int Linea)>();
+            // Necesitamos mapear la lista de 3 elementos a 2 para la conversión (si tu convertidor lo requiere así)
+            // O usamos la lista directamente accediendo a .Tipo en lugar de .Token
+            var listaParaNotacion = tokensParaSintaxis.Select(t => (Token: t.Tipo, Linea: t.Linea)).ToList();
 
-            // 1. Encontrar el inicio de la expresión en la línea 7 (CE6)
-            int startIndex = tokensParaSintaxis.FindIndex(t => t.Linea == 7 && t.Token == "CE6");
+            List<(string Token, int Linea)> tokensCondicion = new List<(string Token, int Linea)>();
+            int startIndex = listaParaNotacion.FindIndex(t => t.Linea == 7 && t.Token == "CE6");
 
             if (startIndex != -1)
             {
                 int balance = 0;
-                for (int i = startIndex; i < tokensParaSintaxis.Count; i++)
+                for (int i = startIndex; i < listaParaNotacion.Count; i++)
                 {
-                    var token = tokensParaSintaxis[i];
+                    var token = listaParaNotacion[i];
                     tokensCondicion.Add(token);
 
-                    if (token.Token == "CE6")
-                    {
-                        balance++;
-                    }
+                    if (token.Token == "CE6") balance++;
                     else if (token.Token == "CE7")
                     {
                         balance--;
-                        if (balance == 0)
-                        {
-                            // Terminamos de capturar la expresión condicional
-                            break;
-                        }
+                        if (balance == 0) break;
                     }
                 }
             }
 
-            // Usamos tokensCondicion como la lista a convertir
             var tokensAConvertir = tokensCondicion;
-
             StringBuilder conversionInfo = new StringBuilder();
 
             if (!tokensAConvertir.Any())
             {
-                conversionInfo.AppendLine("--- ERROR: No se pudo aislar una expresión válida para la conversión (Se buscó la expresión de la Línea 7). ---");
+                conversionInfo.AppendLine("--- ERROR: No se pudo aislar una expresión válida para la conversión (Línea 7). ---");
             }
             else
             {
                 try
                 {
-                    // Nota: Se asume que NotacionConvertidor existe en HumbleLang.Funcionalidad
                     var postfija = NotacionConvertidor.InfijaAPostfija(tokensAConvertir);
                     conversionInfo.AppendLine("--- Conversión de EXPRESIÓN (POSTFIJA) ---");
-                    conversionInfo.AppendLine($"Expresión Original (Infija): {string.Join(" ", tokensAConvertir.Select(t => t.Token))}");
+                    conversionInfo.AppendLine($"Original: {string.Join(" ", tokensAConvertir.Select(t => t.Token))}");
                     conversionInfo.AppendLine(string.Join(" ", postfija.Select(t => t.Token)));
                 }
-                catch (InvalidOperationException ex)
-                {
-                    conversionInfo.AppendLine($"Error en Postfija: {ex.Message}");
-                }
+                catch (Exception ex) { conversionInfo.AppendLine($"Error Postfija: {ex.Message}"); }
 
                 try
                 {
@@ -352,40 +324,65 @@ namespace HumbleLang
                     conversionInfo.AppendLine("\n--- Conversión de EXPRESIÓN (PREFIJA) ---");
                     conversionInfo.AppendLine(string.Join(" ", prefija.Select(t => t.Token)));
                 }
-                catch (InvalidOperationException ex)
-                {
-                    conversionInfo.AppendLine($"Error en Prefija: {ex.Message}");
-                }
+                catch (Exception ex) { conversionInfo.AppendLine($"Error Prefija: {ex.Message}"); }
             }
 
-            // Muestra el resultado de las conversiones en un MessageBox
-            MessageBox.Show(conversionInfo.ToString(), "Resultado de Conversiones de Notación", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(conversionInfo.ToString(), "Conversiones de Notación", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
 
             // =========================================================================
-            // FIN: CONVERSIÓN DE NOTACIÓN
+            // 4. GUARDADO DE AST
             // =========================================================================
-
-
             if (arbol != null)
             {
-                // Guardar AST
                 string userProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
                 string downloadsPath = Path.Combine(userProfile, "Downloads");
                 string filePath = Path.Combine(downloadsPath, "arbol_ast.txt");
-                string arbolImpreso = arbol.ImprimirArbol();
-                System.IO.File.WriteAllText(filePath, arbolImpreso);
-                MessageBox.Show($"El árbol de sintaxis abstracta (AST) se ha guardado en '{filePath}'", "Información");
+                System.IO.File.WriteAllText(filePath, arbol.ImprimirArbol());
+                MessageBox.Show($"Árbol AST guardado en: {filePath}", "Información");
             }
 
-            // ** ANÁLISIS SEMÁNTICO Y GENERACIÓN DE CÓDIGO INTERMEDIO **
+            // =========================================================================
+            // 5. ANÁLISIS SEMÁNTICO
+            // =========================================================================
             AnalizadorSemantico analizadorSemantico = new AnalizadorSemantico();
             analizadorSemantico.Analizar(arbol);
 
-            // RESULTADO FINAL
+            // =========================================================================
+            // 6. RESULTADO FINAL & INTÉRPRETE
+            // =========================================================================
             if (analizadorSintactico.ErroresSintacticos.Count == 0 && analizadorSemantico.Errores.Count == 0)
             {
                 lblResultado.Text = "✅ Cadena válida (sintaxis y semántica)";
                 lblResultado.ForeColor = Color.Green;
+
+                // --- INICIO DEL INTÉRPRETE ---
+                try
+                {
+                    StringBuilder consolaSalida = new StringBuilder();
+                    consolaSalida.AppendLine("--- INICIO DE EJECUCIÓN (HumbleLang) ---");
+                    consolaSalida.AppendLine("");
+
+                    // Instancia del intérprete
+                    Interprete miInterprete = new Interprete();
+
+                    // Ejecutar: cada vez que el código haga 'imp', se guardará en consolaSalida
+                    miInterprete.Interpretar(arbol, (texto) =>
+                    {
+                        consolaSalida.AppendLine("> " + texto);
+                    });
+
+                    consolaSalida.AppendLine("");
+                    consolaSalida.AppendLine("--- FIN DE EJECUCIÓN ---");
+
+                    // Mostrar el resultado de la ejecución
+                    MessageBox.Show(consolaSalida.ToString(), "Ejecución del Programa", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error crítico durante la ejecución: " + ex.Message, "Error Runtime", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                // --- FIN DEL INTÉRPRETE ---
             }
             else if (analizadorSintactico.ErroresSintacticos.Count > 0)
             {
@@ -398,9 +395,11 @@ namespace HumbleLang
                 lblResultado.ForeColor = Color.Red;
             }
 
+            // =========================================================================
+            // 7. GENERACIÓN DE REPORTES EN FORMULARIO
+            // =========================================================================
             StringBuilder pasos = new StringBuilder();
 
-            // 1. Añadir las conversiones de notación
             if (conversionInfo.Length > 0)
             {
                 pasos.AppendLine("==============================================");
@@ -408,19 +407,13 @@ namespace HumbleLang
                 pasos.AppendLine(conversionInfo.ToString());
             }
 
-            // 2. Añadir el registro del análisis sintáctico
             foreach (string paso in analizadorSintactico.RegistroPasos)
             {
                 pasos.AppendLine(paso);
             }
 
-            // ==========================================================
-            // INTEGRACIÓN: CÓDIGO INTERMEDIO (Triplos y Cuádruplos)
-            // ==========================================================
-
             if (analizadorSemantico.CuadruplosGenerados.Any())
             {
-                // 3. Mostrar los Cuádruplos generados
                 pasos.AppendLine("\n==============================================");
                 pasos.AppendLine("CÓDIGO INTERMEDIO: CUÁDRUPLOS");
                 pasos.AppendLine("(Operador, Arg1, Arg2, Resultado)");
@@ -430,15 +423,16 @@ namespace HumbleLang
                     pasos.AppendLine($"{quadIndex++}: {cuadruplo.ToString()}");
                 }
 
-                // 4. Mostrar los Triplos generados
                 pasos.AppendLine("\n==============================================");
                 pasos.AppendLine(analizadorSemantico.ImprimirTriplos());
             }
-            // ==========================================================
+
+            // Mostrar FormResultados con el string de tokens (solo tipos para visualización)
+            string tokensVisuales = string.Join(Environment.NewLine, tokensParaSintaxis.Select(t => t.Tipo));
 
             FormResultados resultados = new FormResultados(
-              string.Join(Environment.NewLine, tokensParaSintaxis.Select(t => t.Token)),
-              pasos.ToString() // Contiene la Notación + Pasos Sintácticos + Cuádruplos/Triplos
+                tokensVisuales,
+                pasos.ToString()
             );
 
             resultados.CargarErroresSintacticos(analizadorSintactico.ErroresSintacticos);
@@ -458,7 +452,8 @@ namespace HumbleLang
 
             editor.DibujarLineasPara(rtEntrada, panelLineas);
         }
-        private void ValidarLexema(string lexema, string estadoFinal, DataTable tablaTokens, StringBuilder archivoTokens, int linea, DataTable tablaIdentificadores)
+        // Se añade el parámetro 'tokensSalida' al final para guardar la información real (Valor)
+        private void ValidarLexema(string lexema, string estadoFinal, DataTable tablaTokens, StringBuilder archivoTokens, int linea, DataTable tablaIdentificadores, List<(string Tipo, string Valor, int Linea)> tokensSalida)
         {
             string tipoToken = "";
             if (string.IsNullOrWhiteSpace(lexema))
@@ -473,67 +468,32 @@ namespace HumbleLang
                 tipoToken = result != null ? result.ToString() : "";
             }
 
-            // Mapeo de tokens a nombres legibles
+            // Mapeo de tokens a nombres legibles (Igual que antes)
             Dictionary<string, string> mapeoTokens = new Dictionary<string, string>()
-      {
-        {"1", "CN_ENTERA"},
-        {"10", "CN_DECIMAL"},
-        {"11", "IDEN"},
-        {"13", "CADE"},
+    {
+        {"1", "CN_ENTERA"}, {"10", "CN_REALES"}, // OJO: CN_DECIMAL -> CN_REALES para coincidir con tu Parser
+        {"11", "IDEN"}, {"13", "CADE"},
         {"14", "OPA1"},
-        {"15", "OPRE1"},
-        {"16", "OPRE2"},
-        {"17", "OPRE3"},
-        {"18", "OPRE4"},
-        {"19", "OPRE5"},
-        {"20", "OPREL1"},
-        {"21", "OPREL2"},
-        {"22", "OPREL3"},
-        {"23", "OPREL4"},
-        {"24", "OPREL5"},
-        {"25", "OPREL6"},
-        {"26", "OPLO1"},
-        {"27", "OPLO2"},
-        {"28", "OPLO3"},
-        {"30", "CE6"},
-        {"31", "CE7"},
-        {"32", "CE8"},
-        {"33", "CE9"},
-        {"35", "PR_ENT"},
-        {"36", "PR_DEC"},
-        {"37", "PR_CAD"},
-        {"38", "PR_LOG"},
-        {"39", "PR_SI"},
-        {"40", "PR_SINO"},
-        {"41", "PR_IMP"},
-        {"42", "PR_IMPRP"},
-        {"43", "PR_INI"},
-        {"44", "PR_FIN"},
-        {"45", "PR_LIM"},
-        {"46", "PR_LEE"},
-        {"47", "PR_CIC"},
-        {"48", "PR_DES"},
-        {"49", "PR_HAS"},
-        {"50", "PR_INC"},
-        {"51", "PR_ROM"},
-        {"52", "PR_VDD"},
-        {"53", "PR_FAL"},
-        {"54", "PR_NEG"},
+        {"15", "OPRE1"}, {"16", "OPRE2"}, {"17", "OPRE3"}, {"18", "OPRE4"}, {"19", "OPRE5"}, {"20", "OPREL1"}, {"21", "OPREL2"}, {"22", "OPREL3"}, {"23", "OPREL4"}, {"24", "OPREL5"}, {"25", "OPREL6"},
+        {"26", "OPLO1"}, {"27", "OPLO2"}, {"28", "OPLO3"},
+        {"30", "CE6"}, {"31", "CE7"}, {"32", "CE8"}, {"33", "CE9"},
+        {"35", "PR_ENT"}, {"36", "PR_DEC"}, {"37", "PR_CAD"}, {"38", "PR_LOG"},
+        {"39", "PR_SI"}, {"40", "PR_SINO"}, {"41", "PR_IMP"}, {"42", "PR_IMPRP"},
+        {"43", "PR_INI"}, {"44", "PR_FIN"}, {"45", "PR_LIM"}, {"46", "PR_LEE"},
+        {"47", "PR_CIC"}, {"48", "PR_DES"}, {"49", "PR_HAS"}, {"50", "PR_INC"},
+        {"51", "PR_ROM"}, {"52", "PR_VDD"}, {"53", "PR_FAL"}, {"54", "PR_NEG"},
         {"126", "COMEN"}
-      };
+    };
 
             if (mapeoTokens.ContainsKey(tipoToken))
             {
                 tipoToken = mapeoTokens[tipoToken];
             }
 
-            if (tipoToken == "COMEN")
-            {
-                return; // Ignorar el token de comentario
-            }
+            if (tipoToken == "COMEN") return; // Ignorar comentario
 
             Dictionary<string, string> errores = new Dictionary<string, string>()
-      {
+    {
         {"141", "ERROR: Identificador no válido"},
         {"142", "ERROR: Comentario no válido"},
         {"143", "ERROR: Cadena no válida"},
@@ -545,7 +505,7 @@ namespace HumbleLang
         {"149", "ERROR: Operador relacional no válido"},
         {"150", "ERROR: Operador de asignación no válido"},
         {"151", "ERROR: Carácter no válido"}
-      };
+    };
 
             if (errores.ContainsKey(tipoToken))
             {
@@ -558,6 +518,13 @@ namespace HumbleLang
             else if (!string.IsNullOrEmpty(tipoToken))
             {
                 archivoTokens.Append(tipoToken + " ");
+
+                // =========================================================
+                // ¡CORRECCIÓN CRÍTICA! 
+                // Guardamos el lexema real ("10") junto con el tipo ("CN_ENTERA")
+                // =========================================================
+                tokensSalida.Add((tipoToken, lexema, linea));
+
                 if (tipoToken == "IDEN" && lexema.Length > 0)
                 {
                     AgregarIdentificador(lexema, linea, tablaIdentificadores);

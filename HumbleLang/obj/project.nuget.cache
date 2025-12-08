@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "snF9mOVBjJg=",
+  "dgSpecHash": "Bcz6IDz2DoM=",
   "success": true,
-  "projectFilePath": "C:\\Users\\aleja\\Downloads\\HumbleLang3\\HumbleLang\\HumbleLang\\HumbleLang.csproj",
+  "projectFilePath": "C:\\Users\\aleja\\HumbleLang\\HumbleLang\\HumbleLang.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\aleja\\.nuget\\packages\\runtime.native.system.data.sqlclient.sni\\4.4.0\\runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
     "C:\\Users\\aleja\\.nuget\\packages\\runtime.win-arm64.runtime.native.system.data.sqlclient.sni\\4.4.0\\runtime.win-arm64.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",

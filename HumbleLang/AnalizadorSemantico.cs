@@ -218,45 +218,56 @@ namespace HumbleLang
 
         private void RevisarCiclo(NodoAST nodo)
         {
+            // Create a new scope for the loop
             tablaSimbolosStack.Push(new Dictionary<string, Simbolo>());
 
-            var idNodo = nodo.Hijos[2];
+            // Extract loop components
+            // Structure: CICLO -> cic(0) -> des(1) -> IDEN(2) -> =(3) -> INI(4) -> has(5) -> FIN(6) -> inc(7) -> PASO(8) -> {(9) -> LISTA(10) -> }(11)
+            var idNodo = nodo.Hijos[2];      // The loop variable (e.g., "i")
             var exprInicial = nodo.Hijos[4];
             var exprCondicion = nodo.Hijos[6];
             var exprIncremento = nodo.Hijos[8];
 
-            // 1. Inicialización (genera: OPAS, resultado, , idNodo.Valor)
+            // --- CRITICAL FIX START ---
+            // Register the loop variable in the current scope immediately.
+            // This ensures that when we analyze the body (RevisarNodo), 'i' is already known.
+            // We assume it's an integer (ENTERO) based on standard loop logic.
+            if (!BuscarSimboloEnAmbitoActual(idNodo.Valor))
+            {
+                tablaSimbolosStack.Peek().Add(idNodo.Valor, new Simbolo(idNodo.Valor, TipoDato.ENTERO, idNodo.Linea));
+            }
+            // --- CRITICAL FIX END ---
+
+            // 1. Generate Intermediate Code for Initialization
             string resultadoInicial = RevisarExpresion(exprInicial, out _);
             CuadruplosGenerados.Add(new Cuadruplo("OPAS", resultadoInicial, "", idNodo.Valor));
 
-            // 2. Etiquetas de control
+            // 2. Control Labels
             string etiquetaInicio = GenerarEtiqueta();
             string etiquetaSalida = GenerarEtiqueta();
 
-            // Etiqueta de inicio del ciclo
+            // Start Label
             CuadruplosGenerados.Add(new Cuadruplo("LABEL", "", "", etiquetaInicio));
 
-            // 3. Condición (genera: T# = Expr)
+            // 3. Condition Check
             string resultadoCondicion = RevisarExpresion(exprCondicion, out _);
-
-            // Salto si la condición es falsa
             CuadruplosGenerados.Add(new Cuadruplo("JUMP_FALSE", resultadoCondicion, "", etiquetaSalida));
 
-            // 4. Cuerpo del ciclo (Hijos[10])
+            // 4. Analyze Loop Body (Now safe because 'i' is registered)
             RevisarNodo(nodo.Hijos[10]);
 
-            // 5. Incremento (genera: T# = Expr)
+            // 5. Increment
             RevisarExpresion(exprIncremento, out _);
 
-            // 6. Salto incondicional al inicio del ciclo
+            // 6. Jump back to start
             CuadruplosGenerados.Add(new Cuadruplo("GOTO", "", "", etiquetaInicio));
 
-            // 7. Etiqueta de salida del ciclo
+            // 7. Exit Label
             CuadruplosGenerados.Add(new Cuadruplo("LABEL", "", "", etiquetaSalida));
 
+            // Exit scope
             tablaSimbolosStack.Pop();
         }
-
         private void RevisarPrint(NodoAST nodo)
         {
             if (nodo.Hijos.Count > 1)

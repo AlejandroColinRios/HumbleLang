@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\aleja\\Downloads\\HumbleLang3\\HumbleLang\\HumbleLang\\HumbleLang.csproj": {}
+    "C:\\Users\\aleja\\HumbleLang\\HumbleLang\\HumbleLang.csproj": {}
   },
   "projects": {
-    "C:\\Users\\aleja\\Downloads\\HumbleLang3\\HumbleLang\\HumbleLang\\HumbleLang.csproj": {
+    "C:\\Users\\aleja\\HumbleLang\\HumbleLang\\HumbleLang.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\aleja\\Downloads\\HumbleLang3\\HumbleLang\\HumbleLang\\HumbleLang.csproj",
+        "projectUniqueName": "C:\\Users\\aleja\\HumbleLang\\HumbleLang\\HumbleLang.csproj",
         "projectName": "HumbleLang",
-        "projectPath": "C:\\Users\\aleja\\Downloads\\HumbleLang3\\HumbleLang\\HumbleLang\\HumbleLang.csproj",
+        "projectPath": "C:\\Users\\aleja\\HumbleLang\\HumbleLang\\HumbleLang.csproj",
         "packagesPath": "C:\\Users\\aleja\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\aleja\\Downloads\\HumbleLang3\\HumbleLang\\HumbleLang\\obj\\",
+        "outputPath": "C:\\Users\\aleja\\HumbleLang\\HumbleLang\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
