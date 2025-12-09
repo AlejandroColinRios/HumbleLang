@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Windows.Forms; // Necesario para MessageBox si ocurre error fatal
 
 namespace HumbleLang
 {
@@ -29,7 +28,6 @@ namespace HumbleLang
             {
                 throw new Exception($"Error Semántico: Variable '{nombre}' no declarada.");
             }
-            // Aquí podrías validar que el tipo coincida (ej. no asignar texto a entero)
             variables[nombre] = valor;
         }
 
@@ -44,7 +42,13 @@ namespace HumbleLang
 
         public bool Existe(string nombre) => variables.ContainsKey(nombre);
 
-        // Limpia la memoria al reiniciar
+        // Método nuevo para saber el tipo de una variable (necesario para 'Lee')
+        public string ObtenerTipoDato(string nombre)
+        {
+            if (tipos.ContainsKey(nombre)) return tipos[nombre];
+            return "null";
+        }
+
         public void Limpiar()
         {
             variables.Clear();
@@ -53,12 +57,13 @@ namespace HumbleLang
     }
 
     // =========================================================
-    // PARTE 2: INTÉRPRETE (CEREBRO)
+    // PARTE 2: INTÉRPRETE (MOTOR DE EJECUCIÓN)
     // =========================================================
     public class Interprete
     {
         private TablaSimbolos tabla;
-        private Action<string> outputCallback; // Función para enviar texto a la ventana
+        private Action<string> outputCallback;      // Para 'imp' (Salida)
+        private Func<string, string> inputCallback; // Para 'Lee' (Entrada)
 
         public Interprete()
         {
@@ -68,12 +73,14 @@ namespace HumbleLang
         /// <summary>
         /// Inicia la ejecución del árbol AST.
         /// </summary>
-        /// <param name="nodo">Nodo raíz (PROG)</param>
-        /// <param name="outputMethod">Función que recibe el texto de los 'imp'</param>
-        public void Interpretar(NodoAST nodo, Action<string> outputMethod)
+        /// <param name="nodo">Raíz del árbol</param>
+        /// <param name="outputMethod">Función para imprimir texto</param>
+        /// <param name="inputMethod">Función para pedir texto al usuario</param>
+        public void Interpretar(NodoAST nodo, Action<string> outputMethod, Func<string, string> inputMethod)
         {
             this.outputCallback = outputMethod;
-            this.tabla.Limpiar(); // Reiniciar variables en cada ejecución
+            this.inputCallback = inputMethod;
+            this.tabla.Limpiar(); // Reiniciar memoria
 
             if (nodo == null) return;
 
@@ -83,7 +90,7 @@ namespace HumbleLang
             }
             catch (Exception ex)
             {
-                outputCallback($"\n[ERROR DE EJECUCIÓN]: {ex.Message}");
+                outputCallback($"\n[ERROR EJECUCIÓN]: {ex.Message}");
             }
         }
 
@@ -93,7 +100,7 @@ namespace HumbleLang
 
             switch (nodo.Tipo)
             {
-                // Nodos contenedores: simplemente recorrer hijos
+                // Nodos contenedores
                 case "PROG":
                 case "STMT_LIST":
                 case "STMT":
@@ -111,8 +118,7 @@ namespace HumbleLang
                     ProcesarAsignacion(nodo);
                     break;
 
-                case "PRINT_STMT":
-                    // Estructura: PRINT -> "imp" (0) -> EXPR (1)
+                case "PRINT_STMT": // imp
                     if (nodo.Hijos.Count > 1)
                     {
                         var val = Evaluar(nodo.Hijos[1]);
@@ -120,10 +126,37 @@ namespace HumbleLang
                     }
                     break;
 
+                case "READ_STMT": // Lee
+                    // Estructura: PR13(Lee) -> IDEN(variable)
+                    if (nodo.Hijos.Count > 1)
+                    {
+                        string nombreVar = nodo.Hijos[1].Valor;
+
+                        // 1. Pedir dato al usuario
+                        string valorIngresado = inputCallback($"Ingrese valor para '{nombreVar}':");
+
+                        // 2. Convertir al tipo correcto
+                        string tipoMeta = tabla.ObtenerTipoDato(nombreVar);
+                        object valorConvertido = valorIngresado;
+
+                        try
+                        {
+                            if (tipoMeta == "ent") valorConvertido = int.Parse(valorIngresado);
+                            else if (tipoMeta == "dec") valorConvertido = double.Parse(valorIngresado, CultureInfo.InvariantCulture);
+                            else if (tipoMeta == "Log") valorConvertido = (valorIngresado == "vdd" || valorIngresado == "true");
+                        }
+                        catch
+                        {
+                            throw new Exception($"Error al convertir '{valorIngresado}' a tipo {tipoMeta}");
+                        }
+
+                        // 3. Guardar en memoria
+                        tabla.Asignar(nombreVar, valorConvertido);
+                    }
+                    break;
+
                 case "LIMPIAR":
                     outputCallback("--- LIMPIAR PANTALLA ---");
-                    // Nota: En WinForms no podemos borrar el MessageBox, 
-                    // así que enviamos una señal o texto informativo.
                     break;
 
                 case "IF_STMT":
@@ -135,7 +168,6 @@ namespace HumbleLang
                     break;
 
                 default:
-                    // Si es un nodo desconocido, intentamos ejecutar sus hijos por si acaso
                     foreach (var hijo in nodo.Hijos) Ejecutar(hijo);
                     break;
             }
@@ -143,28 +175,22 @@ namespace HumbleLang
 
         private void ProcesarDeclaracion(NodoAST nodo)
         {
-            // Estructura: TIPO (0) -> DEC_PRIME (1)
-            // DEC_PRIME tiene: IDEN (0) -> [OPAS (1) -> EXPR (2)] (Opcional)
-
-            string tipoDato = nodo.Hijos[0].Valor; // ent, dec, etc.
+            string tipoDato = nodo.Hijos[0].Valor;
             var decPrime = nodo.Hijos[1];
             string nombreVar = decPrime.Hijos[0].Valor;
 
             object valorInicial = null;
 
-            // Valores por defecto
             if (tipoDato == "ent") valorInicial = 0;
             else if (tipoDato == "dec") valorInicial = 0.0;
-            else if (tipoDato == "log") valorInicial = false; // vdd/fal
+            else if (tipoDato == "Log") valorInicial = false;
             else valorInicial = "";
 
-            // Si hay asignación explícita (ej: ent x = 10)
             if (decPrime.Hijos.Count > 2)
             {
                 valorInicial = Evaluar(decPrime.Hijos[2]);
             }
 
-            // Casteo forzoso inicial
             if (tipoDato == "ent") valorInicial = Convert.ToInt32(valorInicial);
             else if (tipoDato == "dec") valorInicial = Convert.ToDouble(valorInicial, CultureInfo.InvariantCulture);
 
@@ -173,7 +199,6 @@ namespace HumbleLang
 
         private void ProcesarAsignacion(NodoAST nodo)
         {
-            // IDEN (0) -> OPAS (1) -> EXPR (2)
             string nombre = nodo.Hijos[0].Valor;
             object val = Evaluar(nodo.Hijos[2]);
             tabla.Asignar(nombre, val);
@@ -181,24 +206,21 @@ namespace HumbleLang
 
         private void ProcesarIf(NodoAST nodo)
         {
-            // IF -> si (0) -> ( (1) -> COND (2) -> ) (3) -> { (4) -> STMT_LIST (5) -> } (6) -> ELSE? (7)
             object condVal = Evaluar(nodo.Hijos[2]);
             bool condicion = Convert.ToBoolean(condVal);
 
             if (condicion)
             {
-                Ejecutar(nodo.Hijos[5]); // Ejecutar bloque Verdadero
+                Ejecutar(nodo.Hijos[5]); // Bloque SI
             }
             else
             {
-                // Verificar si existe bloque Sino (IF_STMT_PRIME)
                 if (nodo.Hijos.Count > 7 && nodo.Hijos[7].Tipo == "IF_STMT_PRIME")
                 {
                     var nodoElse = nodo.Hijos[7];
-                    // IF_STMT_PRIME -> sino (0) -> { (1) -> STMT_LIST (2) -> } (3)
                     if (nodoElse.Hijos.Count > 2)
                     {
-                        Ejecutar(nodoElse.Hijos[2]);
+                        Ejecutar(nodoElse.Hijos[2]); // Bloque SINO
                     }
                 }
             }
@@ -206,11 +228,7 @@ namespace HumbleLang
 
         private void ProcesarCiclo(NodoAST nodo)
         {
-            // CICLO -> cic(0) -> des(1) -> IDEN(2) -> =(3) -> INICIO(4) -> has(5) -> FIN(6) -> inc(7) -> PASO(8) -> {(9) -> LISTA(10) -> }(11)
-
             string idVar = nodo.Hijos[2].Valor;
-
-            // 1. Inicializar variable del ciclo
             object valInicio = Evaluar(nodo.Hijos[4]);
 
             if (tabla.Existe(idVar)) tabla.Asignar(idVar, valInicio);
@@ -218,69 +236,50 @@ namespace HumbleLang
 
             while (true)
             {
-                // 2. Evaluar Condición de parada
                 double actual = Convert.ToDouble(tabla.Obtener(idVar));
                 double limite = Convert.ToDouble(Evaluar(nodo.Hijos[6]));
                 double paso = Convert.ToDouble(Evaluar(nodo.Hijos[8]));
 
-                // HumbleLang ciclo es inclusivo (<= limite) o exclusivo? 
-                // Asumiremos <= para "has" (hasta)
                 if (actual > limite) break;
 
-                // 3. Ejecutar Cuerpo
-                Ejecutar(nodo.Hijos[10]);
+                Ejecutar(nodo.Hijos[10]); // Cuerpo
 
-                // 4. Incrementar
-                // Releemos el valor por si cambió dentro del ciclo
                 actual = Convert.ToDouble(tabla.Obtener(idVar));
                 tabla.Asignar(idVar, actual + paso);
             }
         }
 
-        // =========================================================
-        // EVALUADOR DE EXPRESIONES (MATEMÁTICAS Y LÓGICAS)
-        // =========================================================
         private object Evaluar(NodoAST nodo)
         {
             if (nodo == null) return null;
 
-            // 1. CASOS BASE (HOJAS DEL ÁRBOL)
             if (nodo.Hijos.Count == 0)
             {
-                switch (nodo.Token) // Usamos la propiedad .Token que agregamos al NodoAST
+                switch (nodo.Token)
                 {
                     case "CN_ENTERA": return int.Parse(nodo.Valor);
                     case "CN_REALES": return double.Parse(nodo.Valor, CultureInfo.InvariantCulture);
-                    case "CADE": return nodo.Valor.Replace("\"", ""); // Limpiar comillas
-                    case "PR20": return true;  // vdd
-                    case "PR06": return false; // fal
-                    case "PR16": return null;  // nul
+                    case "CADE": return nodo.Valor.Replace("\"", "");
+                    case "PR20": return true;
+                    case "PR06": return false;
+                    case "PR16": return null;
                     case "IDEN": return tabla.Obtener(nodo.Valor);
                     default: return null;
                 }
             }
 
-            // 2. EXCEPCIONES ESTRUCTURALES
-
-            // Caso paréntesis: FACTOR -> ( EXPR )
-            if (nodo.Tipo == "FACTOR" && nodo.Hijos[0].Token == "CE6") // CE6 es '('
+            // Excepciones estructurales
+            if (nodo.Tipo == "FACTOR" && nodo.Hijos[0].Token == "CE6") // ( )
             {
                 return Evaluar(nodo.Hijos[1]);
             }
-
-            // Caso negación: FACTOR -> !! FACTOR
-            if (nodo.Tipo == "FACTOR" && nodo.Hijos[0].Token == "OPLO3") // OPLO3 es '!!'
+            if (nodo.Tipo == "FACTOR" && nodo.Hijos[0].Token == "OPLO3") // !!
             {
                 return !Convert.ToBoolean(Evaluar(nodo.Hijos[1]));
             }
 
-            // 3. RECORRIDO RECURSIVO (Izquierda -> Operador -> Derecha)
-            // Dado que la gramática LL1 separa TERM de TERM_PRIME, evaluamos de izq a der.
-
             object valorIzquierdo = Evaluar(nodo.Hijos[0]);
 
-            // Si hay más hijos (ej: ARITH_EXPR -> TERM ARITH_EXPR_PRIME),
-            // pasamos el valor acumulado a la función que procesa la parte derecha ("PRIME").
             if (nodo.Hijos.Count > 1)
             {
                 return EvaluarPrime(valorIzquierdo, nodo.Hijos[1]);
@@ -291,17 +290,13 @@ namespace HumbleLang
 
         private object EvaluarPrime(object acumulado, NodoAST nodoPrime)
         {
-            // Si es epsilon (vacío), regresamos lo que llevamos
             if (nodoPrime.Hijos.Count == 0) return acumulado;
 
-            // Estructura PRIME: OPERADOR (0) -> VALOR_SIGUIENTE (1) -> OTRO_PRIME (2)
-            string operador = nodoPrime.Hijos[0].Valor; // Ej: +, -, *
+            string operador = nodoPrime.Hijos[0].Valor;
             object valorDerecho = Evaluar(nodoPrime.Hijos[1]);
 
-            // Realizar la operación matemática/lógica
             object nuevoAcumulado = Operar(operador, acumulado, valorDerecho);
 
-            // Si hay más operaciones encadenadas (ej: 1 + 2 + 3), recursión
             if (nodoPrime.Hijos.Count > 2)
             {
                 return EvaluarPrime(nuevoAcumulado, nodoPrime.Hijos[2]);
@@ -312,31 +307,23 @@ namespace HumbleLang
 
         private object Operar(string op, object izq, object der)
         {
-            // Intentar trabajar con doubles para simplificar
             double nIzq = 0, nDer = 0;
             bool sonNumeros = double.TryParse(izq.ToString(), out nIzq) &&
                               double.TryParse(der.ToString(), out nDer);
 
             switch (op)
             {
-                // Aritmética
-                case "+": return sonNumeros ? nIzq + nDer : izq.ToString() + der.ToString(); // Suma o Concatenación
+                case "+": return sonNumeros ? nIzq + nDer : izq.ToString() + der.ToString();
                 case "-": return nIzq - nDer;
                 case "*": return nIzq * nDer;
-                case "/":
-                    if (nDer == 0) throw new DivideByZeroException("División por cero");
-                    return nIzq / nDer;
+                case "/": if (nDer == 0) throw new DivideByZeroException(); return nIzq / nDer;
                 case "^": return Math.Pow(nIzq, nDer);
-
-                // Relacional
                 case ">": return nIzq > nDer;
                 case "<": return nIzq < nDer;
                 case ">=": return nIzq >= nDer;
                 case "<=": return nIzq <= nDer;
                 case "==": return izq.Equals(der);
                 case "!=": return !izq.Equals(der);
-
-                // Lógica
                 case "&&": return Convert.ToBoolean(izq) && Convert.ToBoolean(der);
                 case "||": return Convert.ToBoolean(izq) || Convert.ToBoolean(der);
             }

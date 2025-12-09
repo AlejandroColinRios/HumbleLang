@@ -17,6 +17,7 @@ namespace HumbleLang
     {
         private EditorDeCodigo editor;
         private AutoCompleter autoCompleter;
+        private AnalizadorSemantico analizadorSemanticoGlobal;
         int cantErrores = 0;
 
         private int ultimaPosScroll = -1;
@@ -103,6 +104,7 @@ namespace HumbleLang
         // Dentro de HumbleLang/humbleLang.cs
         private void btnValidar_Click(object sender, EventArgs e)
         {
+            // 1. Limpieza de UI
             LimpiarResaltado();
             editor = new EditorDeCodigo(rtEntrada, panelLineas, rtbTokens, panelLineasTokens);
 
@@ -113,6 +115,8 @@ namespace HumbleLang
 
             StringBuilder archivoTokens = new StringBuilder();
             string entrada = rtEntrada.Text;
+
+            // Validación básica
             if (string.IsNullOrWhiteSpace(entrada))
             {
                 lblResultado.Text = "❌ Cadena vacía";
@@ -120,6 +124,7 @@ namespace HumbleLang
                 return;
             }
 
+            // Tablas UI
             DataTable tablaTokens = new DataTable();
             tablaTokens.Columns.Add("Descripcion", typeof(string));
             tablaTokens.Columns.Add("Línea", typeof(int));
@@ -131,16 +136,15 @@ namespace HumbleLang
 
             // =========================================================
             // 1. LISTA MAESTRA DE TOKENS (TIPO, VALOR, LINEA)
-            // Esta lista guardará "CN_ENTERA" y "10" juntos.
             // =========================================================
             List<(string Tipo, string Valor, int Linea)> tokensParaSintaxis = new List<(string, string, int)>();
 
+            // --- ANÁLISIS LÉXICO ---
             string estadoActual = "0";
             StringBuilder lexemaOriginal = new StringBuilder();
             StringBuilder lexemaParaEvaluar = new StringBuilder();
             int numeroLinea = 1;
 
-            // --- INICIO DEL ANÁLISIS LÉXICO ---
             for (int i = 0; i < entrada.Length; i++)
             {
                 char caracter = entrada[i];
@@ -150,7 +154,6 @@ namespace HumbleLang
                 {
                     if (lexemaParaEvaluar.Length > 0)
                     {
-                        // PASAMOS LA LISTA 'tokensParaSintaxis'
                         ValidarLexema(lexemaOriginal.ToString(), estadoActual, tablaTokens, archivoTokens, numeroLinea, tablaIdentificadores, tokensParaSintaxis);
                         lexemaOriginal.Clear();
                         lexemaParaEvaluar.Clear();
@@ -208,7 +211,6 @@ namespace HumbleLang
                     lexemaParaEvaluar.Append(caracter);
                     continue;
                 }
-
                 if (estadoActual == "0" && simbolo == "#")
                 {
                     estadoActual = "124";
@@ -260,26 +262,20 @@ namespace HumbleLang
             }
 
             rtbTokens.Text = archivoTokens.ToString();
-            // --- FIN DEL ANÁLISIS LÉXICO ---
+            // --- FIN ANÁLISIS LÉXICO ---
 
 
-            // =========================================================================
-            // 2. ANÁLISIS SINTÁCTICO (PARSER LL1)
-            // Usamos directamente la lista 'tokensParaSintaxis' que llenamos arriba.
-            // =========================================================================
-
+            // =========================================================
+            // 2. ANÁLISIS SINTÁCTICO (LL1)
+            // =========================================================
             AnalizadorLL1 analizadorSintactico = new AnalizadorLL1();
             NodoAST arbol = analizadorSintactico.Analizar(tokensParaSintaxis);
 
 
-            // =========================================================================
-            // 3. CONVERSIÓN DE NOTACIÓN (Adaptada a la nueva lista)
-            // =========================================================================
-
-            // Necesitamos mapear la lista de 3 elementos a 2 para la conversión (si tu convertidor lo requiere así)
-            // O usamos la lista directamente accediendo a .Tipo en lugar de .Token
+            // =========================================================
+            // 3. CONVERSIÓN DE NOTACIÓN
+            // =========================================================
             var listaParaNotacion = tokensParaSintaxis.Select(t => (Token: t.Tipo, Linea: t.Linea)).ToList();
-
             List<(string Token, int Linea)> tokensCondicion = new List<(string Token, int Linea)>();
             int startIndex = listaParaNotacion.FindIndex(t => t.Linea == 7 && t.Token == "CE6");
 
@@ -290,7 +286,6 @@ namespace HumbleLang
                 {
                     var token = listaParaNotacion[i];
                     tokensCondicion.Add(token);
-
                     if (token.Token == "CE6") balance++;
                     else if (token.Token == "CE7")
                     {
@@ -330,9 +325,9 @@ namespace HumbleLang
             MessageBox.Show(conversionInfo.ToString(), "Conversiones de Notación", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
 
-            // =========================================================================
+            // =========================================================
             // 4. GUARDADO DE AST
-            // =========================================================================
+            // =========================================================
             if (arbol != null)
             {
                 string userProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
@@ -342,16 +337,17 @@ namespace HumbleLang
                 MessageBox.Show($"Árbol AST guardado en: {filePath}", "Información");
             }
 
-            // =========================================================================
-            // 5. ANÁLISIS SEMÁNTICO
-            // =========================================================================
-            AnalizadorSemantico analizadorSemantico = new AnalizadorSemantico();
-            analizadorSemantico.Analizar(arbol);
+            // =========================================================
+            // 5. ANÁLISIS SEMÁNTICO (USANDO VARIABLE GLOBAL)
+            // =========================================================
+            // Inicializamos la variable global para que el botón de ASM la pueda leer después
+            analizadorSemanticoGlobal = new AnalizadorSemantico();
+            analizadorSemanticoGlobal.Analizar(arbol);
 
-            // =========================================================================
+            // =========================================================
             // 6. RESULTADO FINAL & INTÉRPRETE
-            // =========================================================================
-            if (analizadorSintactico.ErroresSintacticos.Count == 0 && analizadorSemantico.Errores.Count == 0)
+            // =========================================================
+            if (analizadorSintactico.ErroresSintacticos.Count == 0 && analizadorSemanticoGlobal.Errores.Count == 0)
             {
                 lblResultado.Text = "✅ Cadena válida (sintaxis y semántica)";
                 lblResultado.ForeColor = Color.Green;
@@ -366,11 +362,17 @@ namespace HumbleLang
                     // Instancia del intérprete
                     Interprete miInterprete = new Interprete();
 
-                    // Ejecutar: cada vez que el código haga 'imp', se guardará en consolaSalida
-                    miInterprete.Interpretar(arbol, (texto) =>
-                    {
-                        consolaSalida.AppendLine("> " + texto);
-                    });
+                    // EJECUCIÓN CON SOPORTE PARA 'imp' Y 'Lee'
+                    miInterprete.Interpretar(arbol,
+                        // Callback 1: SALIDA
+                        (texto) => {
+                            consolaSalida.AppendLine("> " + texto);
+                        },
+                        // Callback 2: ENTRADA
+                        (mensaje) => {
+                            return Microsoft.VisualBasic.Interaction.InputBox(mensaje, "Entrada de Datos HumbleLang", "0");
+                        }
+                    );
 
                     consolaSalida.AppendLine("");
                     consolaSalida.AppendLine("--- FIN DE EJECUCIÓN ---");
@@ -389,15 +391,15 @@ namespace HumbleLang
                 lblResultado.Text = "❌ Error de sintaxis";
                 lblResultado.ForeColor = Color.Red;
             }
-            else if (analizadorSemantico.Errores.Count > 0)
+            else if (analizadorSemanticoGlobal.Errores.Count > 0)
             {
                 lblResultado.Text = "❌ Error semántico";
                 lblResultado.ForeColor = Color.Red;
             }
 
-            // =========================================================================
+            // =========================================================
             // 7. GENERACIÓN DE REPORTES EN FORMULARIO
-            // =========================================================================
+            // =========================================================
             StringBuilder pasos = new StringBuilder();
 
             if (conversionInfo.Length > 0)
@@ -412,22 +414,22 @@ namespace HumbleLang
                 pasos.AppendLine(paso);
             }
 
-            if (analizadorSemantico.CuadruplosGenerados.Any())
+            if (analizadorSemanticoGlobal.CuadruplosGenerados.Any())
             {
                 pasos.AppendLine("\n==============================================");
                 pasos.AppendLine("CÓDIGO INTERMEDIO: CUÁDRUPLOS");
                 pasos.AppendLine("(Operador, Arg1, Arg2, Resultado)");
                 int quadIndex = 1;
-                foreach (var cuadruplo in analizadorSemantico.CuadruplosGenerados)
+                foreach (var cuadruplo in analizadorSemanticoGlobal.CuadruplosGenerados)
                 {
                     pasos.AppendLine($"{quadIndex++}: {cuadruplo.ToString()}");
                 }
 
                 pasos.AppendLine("\n==============================================");
-                pasos.AppendLine(analizadorSemantico.ImprimirTriplos());
+                pasos.AppendLine(analizadorSemanticoGlobal.ImprimirTriplos());
             }
 
-            // Mostrar FormResultados con el string de tokens (solo tipos para visualización)
+            // Mostrar FormResultados
             string tokensVisuales = string.Join(Environment.NewLine, tokensParaSintaxis.Select(t => t.Tipo));
 
             FormResultados resultados = new FormResultados(
@@ -436,7 +438,7 @@ namespace HumbleLang
             );
 
             resultados.CargarErroresSintacticos(analizadorSintactico.ErroresSintacticos);
-            foreach (var err in analizadorSemantico.Errores)
+            foreach (var err in analizadorSemanticoGlobal.Errores)
             {
                 resultados.CargarError("Semántico", err.Mensaje, err.Linea);
                 MostrarAdvertencia(err.Linea, "[Semántico] " + err.Mensaje);
@@ -452,7 +454,6 @@ namespace HumbleLang
 
             editor.DibujarLineasPara(rtEntrada, panelLineas);
         }
-        // Se añade el parámetro 'tokensSalida' al final para guardar la información real (Valor)
         private void ValidarLexema(string lexema, string estadoFinal, DataTable tablaTokens, StringBuilder archivoTokens, int linea, DataTable tablaIdentificadores, List<(string Tipo, string Valor, int Linea)> tokensSalida)
         {
             string tipoToken = "";
@@ -827,6 +828,33 @@ namespace HumbleLang
 
         private void rtbprueba_TextChanged(object sender, EventArgs e)
         {
+        }
+
+        private void btnGenerarASM_Click(object sender, EventArgs e)
+        {
+            if (analizadorSemanticoGlobal != null && analizadorSemanticoGlobal.CuadruplosGenerados.Count > 0)
+            {
+                SaveFileDialog sfd = new SaveFileDialog();
+                sfd.Filter = "Assembler File (*.asm)|*.asm";
+                sfd.FileName = "programa.asm";
+
+                if (sfd.ShowDialog() == DialogResult.OK)
+                {
+                    GeneradorAssembler generador = new GeneradorAssembler(analizadorSemanticoGlobal.CuadruplosGenerados);
+
+                    // 1. Guardar el archivo físico
+                    generador.GenerarArchivo(sfd.FileName);
+
+                    // 2. [NUEVO] Leer lo que acabamos de guardar y mostrarlo en pantalla
+                    string codigoAsmGenerado = System.IO.File.ReadAllText(sfd.FileName);
+
+                    MessageBox.Show(codigoAsmGenerado, "Código Assembler Generado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Primero debes VALIDAR el código para generar los cuádruplos.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
     }
 }

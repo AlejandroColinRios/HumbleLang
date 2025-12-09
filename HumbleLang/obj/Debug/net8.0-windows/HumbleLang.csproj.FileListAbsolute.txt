@@ -181,3 +181,5 @@ C:\Users\aleja\HumbleLang\HumbleLang\obj\Debug\net8.0-windows\refint\HumbleLang.
 C:\Users\aleja\HumbleLang\HumbleLang\obj\Debug\net8.0-windows\HumbleLang.pdb
 C:\Users\aleja\HumbleLang\HumbleLang\obj\Debug\net8.0-windows\HumbleLang.genruntimeconfig.cache
 C:\Users\aleja\HumbleLang\HumbleLang\obj\Debug\net8.0-windows\ref\HumbleLang.dll
+C:\Users\aleja\HumbleLang\HumbleLang\obj\Debug\net8.0-windows\Interop.VBIDE.dll
+C:\Users\aleja\HumbleLang\HumbleLang\obj\Debug\net8.0-windows\HumbleLang.csproj.ResolveComReference.cache

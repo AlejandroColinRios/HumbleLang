@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("HumbleLang")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2c9d4623a55d4c27f8bac9073d7521c23ab63764")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+68582f7cac6d34fc6d6844afcd53a622d237f87c")]
 [assembly: System.Reflection.AssemblyProductAttribute("HumbleLang")]
 [assembly: System.Reflection.AssemblyTitleAttribute("HumbleLang")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

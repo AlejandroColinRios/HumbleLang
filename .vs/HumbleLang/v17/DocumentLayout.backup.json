@@ -3,16 +3,24 @@
   "WorkspaceRootPath": "C:\\Users\\aleja\\HumbleLang\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{1E29F0F8-EF62-4971-91FE-ACD3F4689871}|HumbleLang\\HumbleLang.csproj|c:\\users\\aleja\\humblelang\\humblelang\\analizadorsemantico.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1E29F0F8-EF62-4971-91FE-ACD3F4689871}|HumbleLang\\HumbleLang.csproj|solutionrelative:humblelang\\analizadorsemantico.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1E29F0F8-EF62-4971-91FE-ACD3F4689871}|HumbleLang\\HumbleLang.csproj|c:\\users\\aleja\\humblelang\\humblelang\\interprete.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1E29F0F8-EF62-4971-91FE-ACD3F4689871}|HumbleLang\\HumbleLang.csproj|solutionrelative:humblelang\\interprete.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{1E29F0F8-EF62-4971-91FE-ACD3F4689871}|HumbleLang\\HumbleLang.csproj|C:\\Users\\aleja\\HumbleLang\\humblelang\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{1E29F0F8-EF62-4971-91FE-ACD3F4689871}|HumbleLang\\HumbleLang.csproj|solutionrelative:humblelang\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
       "AbsoluteMoniker": "D:0:0:{1E29F0F8-EF62-4971-91FE-ACD3F4689871}|HumbleLang\\HumbleLang.csproj|c:\\users\\aleja\\humblelang\\humblelang\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{1E29F0F8-EF62-4971-91FE-ACD3F4689871}|HumbleLang\\HumbleLang.csproj|solutionrelative:humblelang\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1E29F0F8-EF62-4971-91FE-ACD3F4689871}|HumbleLang\\HumbleLang.csproj|c:\\users\\aleja\\humblelang\\humblelang\\analizadorsemantico.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1E29F0F8-EF62-4971-91FE-ACD3F4689871}|HumbleLang\\HumbleLang.csproj|solutionrelative:humblelang\\analizadorsemantico.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1E29F0F8-EF62-4971-91FE-ACD3F4689871}|HumbleLang\\HumbleLang.csproj|c:\\users\\aleja\\humblelang\\humblelang\\generadorassembler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1E29F0F8-EF62-4971-91FE-ACD3F4689871}|HumbleLang\\HumbleLang.csproj|solutionrelative:humblelang\\generadorassembler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1E29F0F8-EF62-4971-91FE-ACD3F4689871}|HumbleLang\\HumbleLang.csproj|c:\\users\\aleja\\humblelang\\humblelang\\interprete.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1E29F0F8-EF62-4971-91FE-ACD3F4689871}|HumbleLang\\HumbleLang.csproj|solutionrelative:humblelang\\interprete.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{1E29F0F8-EF62-4971-91FE-ACD3F4689871}|HumbleLang\\HumbleLang.csproj|c:\\users\\aleja\\humblelang\\humblelang\\analizadorll1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -26,24 +34,62 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 3,
+              "Title": "GeneradorAssembler.cs",
+              "DocumentMoniker": "C:\\Users\\aleja\\HumbleLang\\HumbleLang\\GeneradorAssembler.cs",
+              "RelativeDocumentMoniker": "HumbleLang\\GeneradorAssembler.cs",
+              "ToolTip": "C:\\Users\\aleja\\HumbleLang\\HumbleLang\\GeneradorAssembler.cs",
+              "RelativeToolTip": "HumbleLang\\GeneradorAssembler.cs",
+              "ViewState": "AgIAAJsAAAAAAAAAAAAAwNcAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-08T16:02:59.105Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "AnalizadorSemantico.cs",
               "DocumentMoniker": "C:\\Users\\aleja\\HumbleLang\\HumbleLang\\AnalizadorSemantico.cs",
               "RelativeDocumentMoniker": "HumbleLang\\AnalizadorSemantico.cs",
               "ToolTip": "C:\\Users\\aleja\\HumbleLang\\HumbleLang\\AnalizadorSemantico.cs",
               "RelativeToolTip": "HumbleLang\\AnalizadorSemantico.cs",
-              "ViewState": "AgIAANMAAAAAAAAAAAAqwA0BAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAAIoBAAAAe57neZ4XwK4BAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-12-08T04:26:32.5Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 1,
+              "Title": "Form1.cs",
+              "DocumentMoniker": "C:\\Users\\aleja\\HumbleLang\\HumbleLang\\Form1.cs",
+              "RelativeDocumentMoniker": "HumbleLang\\Form1.cs",
+              "ToolTip": "C:\\Users\\aleja\\HumbleLang\\HumbleLang\\Form1.cs*",
+              "RelativeToolTip": "HumbleLang\\Form1.cs*",
+              "ViewState": "AgIAABsDAADQ8zzIY9otwFkDAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-20T17:50:54.067Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Form1.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\aleja\\HumbleLang\\HumbleLang\\Form1.cs",
+              "RelativeDocumentMoniker": "HumbleLang\\Form1.cs",
+              "ToolTip": "C:\\Users\\aleja\\HumbleLang\\HumbleLang\\Form1.cs [Design]*",
+              "RelativeToolTip": "HumbleLang\\Form1.cs [Design]*",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-08T16:03:27.267Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
               "Title": "AnalizadorLL1.cs",
               "DocumentMoniker": "C:\\Users\\aleja\\HumbleLang\\HumbleLang\\AnalizadorLL1.cs",
               "RelativeDocumentMoniker": "HumbleLang\\AnalizadorLL1.cs",
@@ -51,34 +97,19 @@
               "RelativeToolTip": "HumbleLang\\AnalizadorLL1.cs",
               "ViewState": "AgIAAPABAAAAAAAAAAAAACoCAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-08T04:11:34.815Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-08T04:11:34.815Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 4,
               "Title": "Interprete.cs",
               "DocumentMoniker": "C:\\Users\\aleja\\HumbleLang\\HumbleLang\\Interprete.cs",
               "RelativeDocumentMoniker": "HumbleLang\\Interprete.cs",
               "ToolTip": "C:\\Users\\aleja\\HumbleLang\\HumbleLang\\Interprete.cs",
               "RelativeToolTip": "HumbleLang\\Interprete.cs",
-              "ViewState": "AgIAAJAAAAAA/P9/HiYOwDwAAABYAAAAAAAAAA==",
+              "ViewState": "AgIAABEBAAAAAAAAAAAmwC8BAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-08T04:04:58.527Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Form1.cs",
-              "DocumentMoniker": "C:\\Users\\aleja\\HumbleLang\\HumbleLang\\Form1.cs",
-              "RelativeDocumentMoniker": "HumbleLang\\Form1.cs",
-              "ToolTip": "C:\\Users\\aleja\\HumbleLang\\HumbleLang\\Form1.cs",
-              "RelativeToolTip": "HumbleLang\\Form1.cs",
-              "ViewState": "AgIAAIwBAAAAAAAAAAAswMUBAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-20T17:50:54.067Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-08T04:04:58.527Z"
             }
           ]
         }

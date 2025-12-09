@@ -51,6 +51,7 @@
             txtBuscarSimbolo = new TextBox();
             btnBuscarSimbolo = new Button();
             panelErrores = new Panel();
+            btnGenerarASM = new Button();
             ((System.ComponentModel.ISupportInitialize)dtgTokens).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dtgSimbolos).BeginInit();
             panel1.SuspendLayout();
@@ -272,12 +273,23 @@
             panelErrores.Size = new Size(16, 424);
             panelErrores.TabIndex = 24;
             // 
+            // btnGenerarASM
+            // 
+            btnGenerarASM.Location = new Point(172, 533);
+            btnGenerarASM.Name = "btnGenerarASM";
+            btnGenerarASM.Size = new Size(109, 23);
+            btnGenerarASM.TabIndex = 25;
+            btnGenerarASM.Text = "Assembler";
+            btnGenerarASM.UseVisualStyleBackColor = true;
+            btnGenerarASM.Click += btnGenerarASM_Click;
+            // 
             // humbleLang
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ButtonHighlight;
             ClientSize = new Size(1874, 1005);
+            Controls.Add(btnGenerarASM);
             Controls.Add(panelErrores);
             Controls.Add(btnBuscarSimbolo);
             Controls.Add(txtBuscarSimbolo);
@@ -336,5 +348,6 @@
         private Button btnBuscarSimbolo;
         private Panel panelErrores;
         private PictureBox pictureBox1;
+        private Button btnGenerarASM;
     }
 }
